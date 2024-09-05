@@ -80,6 +80,8 @@ const Registeruser = asynchandler(async (req, res) => {
 });
 
 
+
+
 // Login user
 const loginUser = asynchandler(async (req, res) => {
     const { email, username, password } = req.body;
@@ -101,6 +103,9 @@ const loginUser = asynchandler(async (req, res) => {
     const   loggedinUser = await User.findById(user._id).select("-password -refreshToken");
     const options = {
         httpOnly: true,
+        sameSite: "None",
+        secure :"true",
+        
        
         expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000)
     };
