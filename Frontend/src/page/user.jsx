@@ -157,7 +157,7 @@ const UserProfile = () => {
         {/* Video segment */}
         <div className="bg-gray-900 p-8">
           <div className="container mx-auto">
-            <h1 className="text-2xl font-semibold text-white mb-6">Videos</h1>
+            <h1 className="text-2xl font-semibold text-white mb-6">Your Videos</h1>
             <div className="flex flex-wrap -m-4">
               {videos.length > 0 ? (
                 videos.map((video) => (

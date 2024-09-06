@@ -1,2 +1,2 @@
 
-export const API_URL = 'https://server-alpha-gray-79.vercel.app/api/v1' ;
+export const API_URL = 'https://tubetweet.onrender.com/api/v1';

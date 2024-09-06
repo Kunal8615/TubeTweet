@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { API_URL } from "../constant";
 import { Link, useNavigate } from "react-router-dom";
 
+
 const SignUp = () => {
   const [user, setUser] = useState({
     fullname: "",
@@ -48,9 +49,10 @@ const SignUp = () => {
 
     try {
       const response = await fetch(`${API_URL}/users/register`,{
-        method: "POST",
         credentials : "include",
         body: formData,
+        method : "POST",
+      
         
       });
 
