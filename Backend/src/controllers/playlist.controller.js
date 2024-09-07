@@ -4,6 +4,7 @@ import { asynchandler } from "../utils/Asynchander.js";
 import { Apierror } from "../utils/Apierror.js";
 import { Apiresponce } from "../utils/Apiresponce.js";
 import User from "../models/user.model.js";
+import {Video }from "../models/video.model.js"
 
 const createPlaylist = asynchandler(async (req, res) => {
     const {name, description} = req.body
@@ -74,6 +75,30 @@ const getPlaylistById = asynchandler(async (req, res) => {
     return res.status(200)
     .json(new Apiresponce(200,playlist," playist fetched"))
 })
+
+const getPlaylistVideos = asynchandler(async (req, res) => {
+    const { playlistId } = req.params;
+
+    if (!playlistId || !isValidObjectId(playlistId)) {
+        throw new Apierror(400, "Invalid playlist ID");
+    }
+
+    const playlist = await Playlist.findById(playlistId);
+
+    if (!playlist) {
+        throw new Apierror(404, "Playlist not found");
+    }
+
+    // Fetch all videos related to this playlist
+    const videos = await Video.find({ _id: { $in: playlist.videos } });
+
+    if (!videos || videos.length === 0) {
+        throw new Apierror(404, "No videos found for this playlist");
+    }
+
+    return res.status(200).json(new Apiresponce(200, videos, "Videos fetched successfully"));
+});
+
 
 const addVideoToPlaylist = asynchandler(async (req, res) => {
     const {playlistId, videoId} = req.params
@@ -225,6 +250,7 @@ export {
     getPlaylistById,
     addVideoToPlaylist,
     removeVideoFromPlaylist,
+    getPlaylistVideos,
     deletePlaylist,
     updatePlaylist
 }

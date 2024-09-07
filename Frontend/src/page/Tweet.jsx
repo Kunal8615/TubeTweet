@@ -11,6 +11,7 @@ const TweetList = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [error, setError] = useState(null);
+  const [likeStatus, setLikeStatus] = useState({}); // Track likes/dislikes
 
   useEffect(() => {
     fetchTweets();
@@ -117,13 +118,25 @@ const TweetList = () => {
       setIsUpdating(true);
     }
   };
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+
+  const handleLikeDislike = async (tweetId, action) => {
+    try {
+      const response = await fetch(`${API_URL}/like/toggle-tweet//${tweetId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ action }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update like/dislike");
+      }
+      // Update local state to reflect the action
+      const updatedLikeStatus = { ...likeStatus };
+      updatedLikeStatus[tweetId] = action === 'like';
+      setLikeStatus(updatedLikeStatus);
+    } catch (err) {
+      setError("Failed to update like/dislike");
     }
-    return color;
   };
 
   if (error) return <div className="text-red-500">{error}</div>;
@@ -131,7 +144,7 @@ const TweetList = () => {
   return (
     <>
       <MainHeader />
-      <div className="bg-black p-6    mx-auto">
+      <div className="bg-black p-6 mx-auto">
         <h2 className="text-3xl font-bold text-white mb-6">Recent Tweets</h2>
         <div className="flex justify-between mb-6">
           <button
@@ -174,6 +187,23 @@ const TweetList = () => {
                     className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
                   >
                     Delete Tweet
+                  </button>
+                </div>
+              )}
+              {/* Like/Dislike buttons */}
+              {currentUser && (
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => handleLikeDislike(tweet._id, 'like')}
+                    className={`bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition ${likeStatus[tweet._id] === true ? 'opacity-50' : ''}`}
+                  >
+                    Like
+                  </button>
+                  <button
+                    onClick={() => handleLikeDislike(tweet._id, 'dislike')}
+                    className={`bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition ${likeStatus[tweet._id] === false ? 'opacity-50' : ''}`}
+                  >
+                    Dislike
                   </button>
                 </div>
               )}
@@ -221,7 +251,7 @@ const TweetList = () => {
                 onChange={(e) => setUpdateTweet(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-lg mb-4"
                 rows="4"
-                placeholder="Update tweet content"
+                placeholder="Update your tweet"
               />
               <div className="flex justify-end">
                 <button
@@ -232,7 +262,7 @@ const TweetList = () => {
                 </button>
                 <button
                   onClick={handleUpdateTweet}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
                 >
                   Update Tweet
                 </button>

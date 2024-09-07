@@ -9,7 +9,8 @@ import TweetList from "./page/Tweet"
 import MainHeader from './components/header/mainHeader';
 import VideoList from './page/all_videos';
 import LikedVideosList from './page/Liked_video';
-import VideoPlayer from './page/play_subs_video';
+import Playlist from './page/Playlist';
+
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
       <Route path="/videolist" element={<VideoList />} />
       <Route path="/likedvideos" element={<LikedVideosList />} />
       <Route path="/uploadvideo" element={<VideoPostForm />} />
+      <Route path="/playlist" element={<Playlist />} />
       
       </Routes>
     </Router>

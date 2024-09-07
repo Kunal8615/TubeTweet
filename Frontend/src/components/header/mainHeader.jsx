@@ -165,6 +165,17 @@ const MainHeader = () => {
                   Upload
                 </NavLink>
               </li>
+
+              <li>
+                <NavLink
+                  to="/playlist"
+                  className={({ isActive }) =>
+                    `block py-2 px-4 ${isActive ? 'text-orange-400' : 'text-white'} lg:border-0 hover:text-orange-700`
+                  }
+                >
+                  Playlist
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>
