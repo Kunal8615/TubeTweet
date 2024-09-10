@@ -40,6 +40,6 @@ const verifyJWT = asynchandler(async (req, _, next) => {
         console.error("Error in verifyJWT middleware:", error);
         throw new Apierror(401, error?.message || "Invalid access token");
     }
-});
+})
 
 export default verifyJWT;

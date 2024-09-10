@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import Axios
 import { API_URL } from '../constant';
 import { Link, useNavigate } from 'react-router-dom';
-
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -13,9 +13,9 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCredentials(prevState => ({
+    setCredentials((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -23,25 +23,22 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_URL}/users/login`, {
-        method: 'POST',
+      const response = await axios.post(`${API_URL}/users/login`, credentials, {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials : "include",
-        body: JSON.stringify(credentials),
+        withCredentials: true, // Ensures that cookies are sent with the request
       });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Login failed! Please check your credentials.');
       }
 
-      const data = await response.json();
       console.log('Login successful:');
 
       navigate('/profile');
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during login:', error.message);
       alert('Login failed! Please check your credentials.');
     }
   };
