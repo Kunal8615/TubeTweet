@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import Axios
 import VideoPlayer from './play_subs_video';
 import { API_URL } from '../constant';
 import MainHeader from '../components/header/mainHeader';
@@ -11,22 +12,16 @@ const VideoList = () => {
     useEffect(() => {
         const fetchVideosWithUserDetails = async () => {
             try {
-                const response = await fetch(`${API_URL}/video/videoall-video`, {
-                    credentials: "include",
+                const response = await axios.get(`${API_URL}/video/videoall-video`, {
+                    withCredentials: true, // Ensures cookies are sent
                 });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const result = await response.json();
 
                 const videosWithUserDetails = await Promise.all(
-                    result.data.map(async (video) => {
-                        const userResponse = await fetch(`${API_URL}/video/get-user-by-video-id/${video._id}`, {
-                            method: "GET",
-                            credentials: "include",
+                    response.data.data.map(async (video) => {
+                        const userResponse = await axios.get(`${API_URL}/video/get-user-by-video-id/${video._id}`, {
+                            withCredentials: true,
                         });
-                        const userData = await userResponse.json();
-                        return { ...video, user: userData.data };
+                        return { ...video, user: userResponse.data.data };
                     })
                 );
 
@@ -46,20 +41,14 @@ const VideoList = () => {
 
     const fetchviews = async (videoId) => {
         try {
-            const response = await fetch(`${API_URL}/video/video-by-id/${videoId}`, {
-                credentials: "include",
+            const response = await axios.get(`${API_URL}/video/video-by-id/${videoId}`, {
+                withCredentials: true,
             });
-            
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const updatedVideo = await response.json();
 
             // Update the video list with the updated views count
             setVideos((prevVideos) => 
                 prevVideos.map((video) =>
-                    video._id === updatedVideo.data._id ? updatedVideo.data : video
+                    video._id === response.data.data._id ? response.data.data : video
                 )
             );
         } catch (error) {
