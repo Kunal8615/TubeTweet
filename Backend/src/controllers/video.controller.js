@@ -1,14 +1,14 @@
 import mongoose, { isValidObjectId } from "mongoose"
 import { Video } from "../models/video.model.js"
-import  User  from "../models/user.model.js"
+import User from "../models/user.model.js"
 import { Apierror } from "../utils/Apierror.js"
-import {Apiresponce} from "../utils/Apiresponce.js"
+import { Apiresponce } from "../utils/Apiresponce.js"
 import { asynchandler } from "../utils/Asynchander.js"
-import {uploadonCloundinary} from "../utils/cloudinary.js"
+import { uploadonCloundinary } from "../utils/cloudinary.js"
 
 
 const getAllVideos = asynchandler(async (req, res) => {
-    const { page = 1, limit = 10, query, sortBy, sortType , userId } = req.params
+    const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.params
     //TODO: get all videos based on query, sort, pagination
     if (!userId || !isValidObjectId(userId)) {
         throw new Apierror(400, "usernot found")
@@ -41,7 +41,7 @@ const getAllVideos = asynchandler(async (req, res) => {
         return res
             .status(200)
             .json(
-               new Apiresponce(200, {}, "np videos there")
+                new Apiresponce(200, {}, "np videos there")
             )
     }
     let filteredVideos = videos.map(v => v.videos); // Extract the videos array
@@ -141,13 +141,13 @@ const publishAVideo = asynchandler(async (req, res) => {
 
 const getVideoById = asynchandler(async (req, res) => {
     const { videoId } = req.params;
-    if (!videoId || !isValidObjectId(videoId)) { 
-        throw new Apierror(401,"videoid is invalid"); 
+    if (!videoId || !isValidObjectId(videoId)) {
+        throw new Apierror(401, "videoid is invalid");
     }
 
     const video = await Video.findById(videoId);
     if (!video) {
-        throw new Apierror(401,"video not found"); 
+        throw new Apierror(401, "video not found");
     }
 
     if (video) {
@@ -160,94 +160,94 @@ const getVideoById = asynchandler(async (req, res) => {
 
 
 const updateVideo = asynchandler(async (req, res) => {
-    const { videoId  } = req.params
-    const { title, description ,thumbnail} = req.body;
+    const { videoId } = req.params
+    const { title, description, thumbnail } = req.body;
 
-   if(!mongoose.isValidObjectId(videoId) && !videoId){
-    throw new Apierror(401,"invalid video id");
-   }
-
-   const video = await Video.findById(videoId)
-   if(!video){
-    throw new Apierror(401, "video not found")
-   }
-   if(video?.owner.toString()!==req.user?._id.toString()){
-    throw new Apiresponce(401,"only owner can change")
-   }
-
-   const thumbnailLocalPath = req.files?.thumbnail[0]?.path
-   if (!thumbnailLocalPath) {
-       throw new Apierror(401,"Thumbnail not found")
-   }
-
-   const uploadThumbnail = await uploadonCloundinary(thumbnailLocalPath)
-
-   const updatedVideo = await Video.findByIdAndUpdate(
-    videoId,
-    {
-        $set: {
-            title,
-            description,
-            thumbnail : uploadThumbnail.url
-        }
-    },
-    {
-        new: true
+    if (!mongoose.isValidObjectId(videoId) && !videoId) {
+        throw new Apierror(401, "invalid video id");
     }
-   )
 
-   if(!updatedVideo){
-    throw new Apierror(401 , "video not found")
-   }
-   return res
-   .status(200)
-   .json(
-       new Apiresponce(
-           200,
-           updatedVideo,
-           "video data updated sucessfully"
-       )
-   )
+    const video = await Video.findById(videoId)
+    if (!video) {
+        throw new Apierror(401, "video not found")
+    }
+    if (video?.owner.toString() !== req.user?._id.toString()) {
+        throw new Apiresponce(401, "only owner can change")
+    }
+
+    const thumbnailLocalPath = req.files?.thumbnail[0]?.path
+    if (!thumbnailLocalPath) {
+        throw new Apierror(401, "Thumbnail not found")
+    }
+
+    const uploadThumbnail = await uploadonCloundinary(thumbnailLocalPath)
+
+    const updatedVideo = await Video.findByIdAndUpdate(
+        videoId,
+        {
+            $set: {
+                title,
+                description,
+                thumbnail: uploadThumbnail.url
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    if (!updatedVideo) {
+        throw new Apierror(401, "video not found")
+    }
+    return res
+        .status(200)
+        .json(
+            new Apiresponce(
+                200,
+                updatedVideo,
+                "video data updated sucessfully"
+            )
+        )
 })
 
 const deleteVideo = asynchandler(async (req, res) => {
     const { videoId } = req.params
-    if(!videoId && !isValidObjectId(videoId)){
-        throw new Apierror(400,"incalid video id in parmas")
+    if (!videoId && !isValidObjectId(videoId)) {
+        throw new Apierror(400, "incalid video id in parmas")
     }
 
     const video = await Video.findById(videoId)
-    if(!video){
-        throw new Apierror(400,"video not found")
+    if (!video) {
+        throw new Apierror(400, "video not found")
     }
 
-    if(video?.owner.toString()!==req.user?._id.toString()){
-        throw new Apierror(401,"only owner can delete the video")
+    if (video?.owner.toString() !== req.user?._id.toString()) {
+        throw new Apierror(401, "only owner can delete the video")
     }
 
-    const  deleteVideo = await Video.findByIdAndDelete(videoId)
+    const deleteVideo = await Video.findByIdAndDelete(videoId)
 
-    if(!deleteVideo){
-        throw new Apierror(401," try again later")
+    if (!deleteVideo) {
+        throw new Apierror(401, " try again later")
     }
 
     return res.status(200).
-    json( new Apiresponce(200,
-        {},
-        "successfully delete the video"
-    ))
+        json(new Apiresponce(200,
+            {},
+            "successfully delete the video"
+        ))
 })
 const togglePublishStatus = asynchandler(async (req, res) => {
     //console.log(req.params);
     var { videoid } = req.params;
- //   console.log(videoid);
-    if (!videoid ) {
+    //   console.log(videoid);
+    if (!videoid) {
         throw new Apierror(400, "Invalid-video-Id");
     }
-    if(!isValidObjectId(videoid)){
+    if (!isValidObjectId(videoid)) {
         throw new Apierror(401, "invalid object in DB")
     }
- 
+
     const video = await Video.findById(videoid);
 
     if (!video) {
@@ -295,17 +295,17 @@ const getAllUsersVideos = asynchandler(async (req, res) => {
     if (videos.length === 0) {
         return res.status(200).json(new Apiresponce(200, {}, "No videos found"));
     }
-    
+
     let filteredVideos = videos.map((v) => v.videos); // Extract the videos array
-    
+
     if (query) {
         filteredVideos = filteredVideos.filter(
             (video) =>
                 video.title.toLowerCase().includes(query.toLowerCase()) ||
-            video.description.toLowerCase().includes(query.toLowerCase())
+                video.description.toLowerCase().includes(query.toLowerCase())
         );
     }
-    
+
     if (sortBy && sortType) {
         filteredVideos.sort((a, b) => {
             if (sortType === "asc") {
@@ -315,14 +315,14 @@ const getAllUsersVideos = asynchandler(async (req, res) => {
             }
         });
     }
-    
+
     const paginate = (page, limit, videos) => {
         const startingIndex = (page - 1) * limit;
         const endIndex = page * limit;
         return videos.slice(startingIndex, endIndex);
     };
-  
-    
+
+
     return res.status(200).json(
         new Apiresponce(
             200,
@@ -355,6 +355,35 @@ const getUserByVideoId = asynchandler(async (req, res) => {
     return res.status(200).json(new Apiresponce(200, user, "User fetched successfully"));
 });
 
+const searchVideo = asynchandler(async (req, res) => {
+    try {
+        const { query } = req.query;
+        const user = req.user;
+        if (!query) {
+            throw new Apierror(400, "Invalid search query");
+        }
+        const result = await Video.aggregate([
+           
+            {
+                $match: {
+                    title: { $regex: query, $options: "i" }
+                }
+            },
+            {
+                $project: {
+                    owner: 0
+                }
+            }
+
+        ])
+        return res.status(200).json(new Apiresponce(200, result, "Videos fetched successfully"))
+    } catch (error) {
+        return res.status(404).json(new Apiresponce(500, {}, "Error in search"))
+    }
+
+
+})
+
 
 export {
     getAllVideos,
@@ -364,5 +393,6 @@ export {
     updateVideo,
     deleteVideo,
     togglePublishStatus,
-    getUserByVideoId
+    getUserByVideoId,
+    searchVideo
 }

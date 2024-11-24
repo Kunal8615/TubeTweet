@@ -8,7 +8,8 @@ import { getAllVideos,
     getAllUsersVideos,
     deleteVideo,
     togglePublishStatus,
-getUserByVideoId} from "../controllers/video.controller.js"
+getUserByVideoId,
+searchVideo} from "../controllers/video.controller.js"
 import { upload } from "../middlewares/multer.middleware.js";
 
 
@@ -43,6 +44,7 @@ router.route("/update-video/:videoId").patch(upload.fields([
 
 router.route("/toggle/publish/:videoid").patch(togglePublishStatus);
 router.route("/get-user-by-video-id/:videoId").get(getUserByVideoId);
+router.route("/search").get(searchVideo)
 
 
 export default router

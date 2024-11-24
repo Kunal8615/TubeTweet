@@ -10,6 +10,7 @@ import MainHeader from './components/header/mainHeader';
 import VideoList from './page/all_videos';
 import LikedVideosList from './page/Liked_video';
 import Playlist from './page/Playlist';
+import Search from './page/Search';
 
 
 
@@ -30,6 +31,7 @@ const App = () => {
       <Route path="/likedvideos" element={<LikedVideosList />} />
       <Route path="/uploadvideo" element={<VideoPostForm />} />
       <Route path="/playlist" element={<Playlist />} />
+      <Route path="/search" element={<Search />} />
       
       </Routes>
     </Router>

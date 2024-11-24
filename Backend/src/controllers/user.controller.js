@@ -99,48 +99,48 @@ const loginUser = asynchandler(async (req, res) => {
         throw new Apierror(401, "Invalid user credentials");
     }
     const { accessToken, refreshToken } = await GenerateAccessAndRefreshTokens(user._id);
-  //  console.log(accessToken,refreshToken);
-    const   loggedinUser = await User.findById(user._id).select("-password -refreshToken");
+    //  console.log(accessToken,refreshToken);
+    const loggedinUser = await User.findById(user._id).select("-password -refreshToken");
     const options = {
         httpOnly: true,
         sameSite: "None",
-        secure :"true",
-        
-       
+        secure: "true",
+
+
         expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000)
     };
-    console.log( loggedinUser,"login done");
+    console.log(loggedinUser, "login done");
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
         .json(new Apiresponce(200, { user: loggedinUser, accessToken, refreshToken },
-             "User logged in successfully"));
-    });
+            "User logged in successfully"));
+});
 
 const logoutUser = asynchandler(async (req, res) => {
     try {
-      await User.findByIdAndUpdate(req.user._id, {
-        $unset: {
-          refreshToken: 1
-        }
-      }, {
-        new: true
-      });
-      const options = {
-        httpOnly: true,
-        secure: true
-      };
- 
-  console.log("user logout done");
-      return res.status(200)
-        .clearCookie("accessToken", options).clearCookie("refreshToken", options)
-        .json(new Apiresponce(200, {}, "User logged out"));
+        await User.findByIdAndUpdate(req.user._id, {
+            $unset: {
+                refreshToken: 1
+            }
+        }, {
+            new: true
+        });
+        const options = {
+            httpOnly: true,
+            secure: true
+        };
+
+        console.log("user logout done");
+        return res.status(200)
+            .clearCookie("accessToken", options).clearCookie("refreshToken", options)
+            .json(new Apiresponce(200, {}, "User logged out"));
     } catch (error) {
-      return res.status(500).json(new Apiresponce(500, {}, "An error occurred during logout"));
+        return res.status(500).json(new Apiresponce(500, {}, "An error occurred during logout"));
     }
-  });
-  
+});
+
 
 //refreshAccessToken
 
@@ -187,22 +187,18 @@ const refreshAccessToken = asynchandler(async (req, res) => {
     }
 })
 
-const changeCurrentPassword = asynchandler(async(req,res)=>{
-    const {oldpassword,newpassword} = req.body
-
- //   if(!(newpassword === confgPassword)){  }
-
-     const user = await User.findById(req.user?._id)
-      const isPasswordCorrect = await user.isPasswordCorrect(oldpassword)
-      if(!isPasswordCorrect){
-        throw new Apierror(400,"invalid password")
-      }
-
-      user.password = newpassword
-       await user.save({validateBeforeSave:false})
-       
-       return res.status(200)
-       .json(new Apiresponce(200,{},"passsword changed succefullly"))
+const changeCurrentPassword = asynchandler(async (req, res) => {
+    const { oldpassword, newpassword } = req.body
+    //   if(!(newpassword === confgPassword)){  }
+    const user = await User.findById(req.user?._id)
+    const isPasswordCorrect = await user.isPasswordCorrect(oldpassword)
+    if (!isPasswordCorrect) {
+        throw new Apierror(400, "invalid password")
+    }
+    user.password = newpassword
+    await user.save({ validateBeforeSave: false })
+    return res.status(200)
+        .json(new Apiresponce(200, {}, "passsword changed succefullly"))
 })
 
 const changeUserName = asynchandler(async (req, res) => {
@@ -212,7 +208,6 @@ const changeUserName = asynchandler(async (req, res) => {
     if (!newusername || !password) {
         throw new Apierror(400, "New username and password are required");
     }
-
     // Find user by ID from the request
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -228,103 +223,96 @@ const changeUserName = asynchandler(async (req, res) => {
     // Update username and save user
     user.username = newusername;
     await user.save({ validateBeforeSave: false });
-    console.log("username updated"); 
+    console.log("username updated");
     // Send success response
     return res.status(200)
         .json(new Apiresponce(200, res.user, "Username changed successfully"));
 });
 
 
-const getCurrentUser = asynchandler(async(req,res)=>{
+const getCurrentUser = asynchandler(async (req, res) => {
     return res.status(200)
-    .json(new Apiresponce(200,req.user,"user current user"))
+        .json(new Apiresponce(200, req.user, "user current user"))
 })
-
-//
 //update detail
-const updateAccountDetail = asynchandler(async(req,res)=>{
 
-    const {fullname,email} = req.body
-    if(!fullname || !email){
-        throw new Apierror(400,"all feild are req")
+
+const updateAccountDetail = asynchandler(async (req, res) => {
+    const { fullname, email } = req.body
+    if (!fullname || !email) {
+        throw new Apierror(400, "all feild are req")
     }
-   const user =  User.findByIdAndUpdate(req.user?._id,
+    const user = User.findByIdAndUpdate(req.user?._id,
         {
-            $set :{
+            $set: {
                 fullname,
                 email
             }
         },
-        { new : true}
-    ).select ("-password")
+        { new: true }
+    ).select("-password")
 
-        return res.status(200)
-        .json(new Apiresponce(200,user,"account detail updated successfully"))
+    return res.status(200)
+        .json(new Apiresponce(200, user, "account detail updated successfully"))
 })
-
 
 //file update
 
-const updateUserAvatar = asynchandler(async(req,res)=>{
+const updateUserAvatar = asynchandler(async (req, res) => {
     const avatarLocalPath = req.file?.path
-
-    if(!avatarLocalPath){
+    if (!avatarLocalPath) {
         throw new Apierror(400, "avatar file missing")
     }
-
     const avatar = await uploadonCloundinary(avatarLocalPath)
-    if(!avatar.url){
-        throw new Apierror(400,"error while uploading on avatar")
+    if (!avatar.url) {
+        throw new Apierror(400, "error while uploading on avatar")
+    }
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                avatar: avatar.url
+            }
+        },
+        { new: true }
+    ).select("-password")
+
+    return res
+        .status(200)
+        .json(
+            new Apiresponce(200, user, "avatar image upload successfully ")
+        )
+})
+
+const updateUserCoverimage = asynchandler(async (req, res) => {
+
+    const coverLocalPath = req.file?.path
+
+    if (!coverLocalPath) {
+        throw new Apierror(400, "cover file missing")
+    }
+
+    const coverimage = await uploadonCloundinary(coverLocalPath)
+    if (!coverimage.url) {
+        throw new Apierror(400, "error while uploading on cover")
     }
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
 
-            $set : {
-                avatar : avatar.url
+            $set: {
+                coverimage: coverimage.url
             }
         },
-        {new:true}
+        { new: true }
     ).select("-password")
 
     return res
-    .status(200)
-    .json(
-        new Apiresponce(200, user , "avatar image upload successfully ")
-    )
-})
-
-
-const updateUserCoverimage = asynchandler(async(req,res)=>{
-
-    const coverLocalPath = req.file?.path
-
-    if(!coverLocalPath){
-        throw new Apierror(400, "cover file missing")
-    }
-
-    const coverimage = await uploadonCloundinary(coverLocalPath)
-    if(!coverimage.url){
-        throw new Apierror(400,"error while uploading on cover")
-    }
-
-   const user =   await User.findByIdAndUpdate(
-        req.user?._id,
-        {
-
-            $set : {
-                coverimage : coverimage.url
-            }
-        },
-        {new:true}
-    ).select("-password")
-
-    return res
-    .status(200)
-    .json(
-        new Apiresponce(200,user , "cover image upload successfully ")
-    )
+        .status(200)
+        .json(
+            new Apiresponce(200, user, "cover image upload successfully ")
+        )
 })
 
 const getUserChannelProfile = asynchandler(async (req, res) => {
@@ -397,38 +385,38 @@ const getUserChannelProfile = asynchandler(async (req, res) => {
 });
 
 
-const getWatchHistory = asynchandler(async(req,res)=>{
+const getWatchHistory = asynchandler(async (req, res) => {
     const user = await User.aggregate([
         {
-            $match : {
-                _id : new mongoose.Types.ObjectId(req.user._id)
+            $match: {
+                _id: new mongoose.Types.ObjectId(req.user._id)
             }
-            
+
         },
         {
-            $lookup : {
-                from : "Videos",
-                localField : "watchHistory",
-                foreignField : "_id",
-                as : "watchHistory",
-                pipeline : [
+            $lookup: {
+                from: "Videos",
+                localField: "watchHistory",
+                foreignField: "_id",
+                as: "watchHistory",
+                pipeline: [
                     {
-                        $lookup : {
-                            from : "users",
-                            localField : "owner",
-                            foreignField : "_id",
-                            as : "owner",
-                            pipeline : [
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "owner",
+                            pipeline: [
                                 {
-                                    $project : {
-                                        fullname :1,
-                                        username : 1,
-                                        avatar : 1
+                                    $project: {
+                                        fullname: 1,
+                                        username: 1,
+                                        avatar: 1
                                     }
-                                },{
-                                    $addFields : {
-                                        owner : {
-                                            $first : "$owner"
+                                }, {
+                                    $addFields: {
+                                        owner: {
+                                            $first: "$owner"
                                         }
                                     }
                                 }
@@ -441,11 +429,13 @@ const getWatchHistory = asynchandler(async(req,res)=>{
     ])
 
     return res
-    .status(200)
-    .json(
-        new Apiresponce(200,user[0].watchHistory, "watched history fetched successfully")
-    )
+        .status(200)
+        .json(
+            new Apiresponce(200, user[0].watchHistory, "watched history fetched successfully")
+        )
 })
 
-export { Registeruser, loginUser, logoutUser, refreshAccessToken ,changeCurrentPassword
-    ,getCurrentUser,updateUserAvatar,updateUserCoverimage,changeUserName, updateAccountDetail,getWatchHistory ,getUserChannelProfile};
+export {
+    Registeruser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword
+    , getCurrentUser, updateUserAvatar, updateUserCoverimage, changeUserName, updateAccountDetail, getWatchHistory, getUserChannelProfile
+};

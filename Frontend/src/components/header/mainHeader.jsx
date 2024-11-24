@@ -137,6 +137,16 @@ const MainHeader = () => {
               </li>
               <li>
                 <NavLink
+                  to="/search"
+                  className={({ isActive }) =>
+                    `block py-2 px-4 ${isActive ? 'text-orange-400' : 'text-white'} lg:border-0 hover:text-orange-700`
+                  }
+                >
+                Search
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                   to="/videolist"
                   className={({ isActive }) =>
                     `block py-2 px-4 ${isActive ? 'text-orange-400' : 'text-white'} lg:border-0 hover:text-orange-700`
