@@ -7,16 +7,15 @@ const app = express();
 app.use(
   cors({
         origin: [
-                "http://localhost:5173/",
-                "https://frontend-kappa-five-10.vercel.app",
-               // "https://server-alpha-gray-79.vercel.app",
-               
-               
+                "http://localhost:5173",
+                "tube-tweet-mu.vercel.app",
+               "https://server-alpha-gray-79.vercel.app",
+             //  "https://tubetweet.onrender.com"
               ],
     credentials: true,
   })
 );
-
+app.options('*', cors());
 // Security practices
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
