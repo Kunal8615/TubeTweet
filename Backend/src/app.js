@@ -15,7 +15,7 @@ app.use(
     credentials: true,
   })
 );
-app.options('*', cors());
+//app.options('*', cors());
 // Security practices
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
