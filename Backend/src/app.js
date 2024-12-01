@@ -6,18 +6,16 @@ const app = express();
 
 app.use(
   cors({
-        origin: [
-               "http://localhost:5173",
-                "https://tube-tweet-mu.vercel.app",
-            
-             //  "https://tubetweet.onrender.com"
-              ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-
+    origin: [
+      "http://localhost:5173", // Trailing slash hata diya
+      "https://tube-tweet-mu.vercel.app",
+    ],
+    credentials: true, // Allow credentials (cookies)
+   // methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
   })
 );
-//app.options('*', cors());
+app.options('*', cors());
 // Security practices
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
