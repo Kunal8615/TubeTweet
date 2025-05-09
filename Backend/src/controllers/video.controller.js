@@ -362,11 +362,10 @@ const searchVideo = asynchandler(async (req, res) => {
         if (!query) {
             throw new Apierror(400, "Invalid search query");
         }
-        const result = await Video.aggregate([
-           
+        const result = await Video.aggregate([        
             {
                 $match: {
-                    title: { $regex: query, $options: "i" }
+                description: { $regex: query, $options: "i" }
                 }
             },
             {
@@ -374,14 +373,11 @@ const searchVideo = asynchandler(async (req, res) => {
                     owner: 0
                 }
             }
-
         ])
         return res.status(200).json(new Apiresponce(200, result, "Videos fetched successfully"))
     } catch (error) {
         return res.status(404).json(new Apiresponce(500, {}, "Error in search"))
     }
-
-
 })
 
 

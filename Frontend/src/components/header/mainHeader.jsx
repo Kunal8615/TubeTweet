@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { API_URL } from '../../constant';
 
 const MainHeader = () => {
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState('')
   const [error, setError] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false); // New state for loading indicator
@@ -133,6 +133,17 @@ const MainHeader = () => {
                   }
                 >
                   Tweet
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/roadmap"
+                  className={({ isActive }) =>
+                    `block py-2 px-4 ${isActive ? 'text-orange-400' : 'text-white'} lg:border-0 hover:text-orange-700`
+                  }
+                >
+                RoadMaps
                 </NavLink>
               </li>
               <li>

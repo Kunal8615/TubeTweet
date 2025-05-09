@@ -8,23 +8,23 @@ function Search() {
   const [videos, setVideos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch videos immediately on query change
+
   useEffect(() => {
     if (query.trim()) {
       fetchVideos();
     } else {
-      setVideos([]); // Clear results if input is empty
+      setVideos([]); 
     }
   }, [query]);
 
-  // Function to fetch videos based on search query
+
   const fetchVideos = async () => {
     setIsLoading(true);
     try {
         console.log(`${API_URL}/video/search?query=${ query } `);
       const response = await fetch(`${API_URL}/video/search?query=${ query } `,{
         method : "GET",
-        credentials: "include", // Include cookies for authenticated requests
+        credentials: "include", 
         
     
       });
@@ -60,14 +60,14 @@ function Search() {
       {/* Loading State */}
       {isLoading && <p className="text-gray-500">Loading...</p>}
 
-      {/* Video Results */}
+     
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {videos.map((video) => (
           <VideoCard key={video._id} video={video} />
         ))}
       </div>
 
-      {/* No Results */}
+     
       {!isLoading && videos.length === 0 && query && (
         <p className="text-gray-500">No videos found for "{query}"</p>
       )}

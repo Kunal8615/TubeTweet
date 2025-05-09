@@ -1,8 +1,8 @@
 import { asynchandler } from "../utils/Asynchander.js";
 import { Apierror } from "../utils/Apierror.js";
+import { Apiresponce } from "../utils/Apiresponce.js";
 import User from "../models/user.model.js";
 import { uploadonCloundinary } from "../utils/cloudinary.js";
-import { Apiresponce } from "../utils/Apiresponce.js";
 import jwt, { decode } from "jsonwebtoken"
 import mongoose, { mongo } from "mongoose";
 
@@ -14,7 +14,7 @@ const GenerateAccessAndRefreshTokens = async (userId) => {
 
         // Save refresh token in database
         user.refreshToken = refreshToken;
-        await user.save({ validateBeforeSave: false });
+        await user.save({ validateBeforeSave: false });  
 
         return { accessToken, refreshToken };
     } catch (error) {
@@ -24,8 +24,8 @@ const GenerateAccessAndRefreshTokens = async (userId) => {
 
 const Registeruser = asynchandler(async (req, res) => {
     // Debugging Statements
-    console.log("Request Body:", req.body);
-    console.log("Request Files:", req.files);
+//    console.log("Request Body:", req.body);
+  //  console.log("Request Files:", req.files);
 
     const { fullname, email, username, password } = req.body;
 

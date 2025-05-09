@@ -4,7 +4,7 @@ import MainHeader from '../components/header/mainHeader';
 
 const LikedVideosList = () => {
   const [likedVideos, setLikedVideos] = useState([]);
-  const [loading, setLoading] = useState(true); // Step 1: Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLikedVideos = async () => {

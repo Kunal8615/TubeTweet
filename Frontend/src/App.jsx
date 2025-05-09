@@ -11,34 +11,28 @@ import VideoList from './page/all_videos';
 import LikedVideosList from './page/Liked_video';
 import Playlist from './page/Playlist';
 import Search from './page/Search';
-
-
+import RoadMap from './page/roadMap';
+import RoadmapVideo from './page/roadmapVideo'; // ✅ Capitalized
 
 const App = () => {
   return (
-
-    <>
-    
     <Router>
       <Routes>
-      <Route path="/tweet" element={<TweetList />} />
-      <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path ="/homepage" element={ <MainHeader/>} />
-      <Route path="/profile" element={<UserProfile />} />
-      <Route path="/videolist" element={<VideoList />} />
-      <Route path="/likedvideos" element={<LikedVideosList />} />
-      <Route path="/uploadvideo" element={<VideoPostForm />} />
-      <Route path="/playlist" element={<Playlist />} />
-      <Route path="/search" element={<Search />} />
-      
+        <Route path="/homepage" element={<MainHeader />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/videolist" element={<VideoList />} />
+        <Route path="/likedvideos" element={<LikedVideosList />} />
+        <Route path="/uploadvideo" element={<VideoPostForm />} />
+        <Route path="/playlist" element={<Playlist />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/roadmap" element={<RoadMap />} />
+        <Route path="/tubetweet/:title" element={<RoadmapVideo />} /> {/* ✅ Fixed */}
+        <Route path="/tweet" element={<TweetList />} />
       </Routes>
     </Router>
-   
-
-  
-    </>
   );
 };
 
