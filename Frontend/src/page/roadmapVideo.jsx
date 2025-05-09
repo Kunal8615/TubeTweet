@@ -44,43 +44,45 @@ const RoadmapVideo = () => {
     return (
         <>
             <MainHeader/>
-            <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-6">Videos for {title}</h1>
-                {isLoading ? (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="relative">
-                            <div className="absolute top-0 left-0 w-12 h-12 bg-white rounded-full animate-pulse"></div>
-                            <div className="absolute top-0 left-12 w-12 h-12 bg-white rounded-full animate-pulse animation-delay-200"></div>
-                            <div className="absolute top-0 left-24 w-12 h-12 bg-white rounded-full animate-pulse animation-delay-400"></div>
-                        </div>
-                    </div>
-                ) : selectedVideo ? (
-                    <VideoPlayer video={selectedVideo} />
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        {videos.map((video) => (
-                            <div
-                                key={video._id}
-                                className="video-item cursor-pointer bg-slate-100 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
-                                onClick={() => handleVideoClick(video)}
-                            >
-                                <img
-                                    src={video.thumbnail}
-                                    alt={video.title}
-                                    className="w-full h-40 object-cover"
-                                />
-                                <div className="p-2">
-                                    <h3 className="text-lg font-semibold truncate">{video.title}</h3>
-                                    <p className="text-sm text-gray-800 truncate">Description: {video.description}</p>
-                                    <p className="text-sm text-blue-800 font-bold truncate">Views: {video.views}</p>
-                                    <p className="text-sm text-gray-600">
-                                        {new Date(video.createdAt).toLocaleDateString()}
-                                    </p>
-                                </div>
+            <div className="w-full p-4 bg-gray-900 min-h-screen">
+                <div className="max-w-7xl mx-auto">
+                    <h1 className="text-2xl font-bold mb-6 text-white">Videos for {title}</h1>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-full">
+                            <div className="relative">
+                                <div className="absolute top-0 left-0 w-12 h-12 bg-white rounded-full animate-pulse"></div>
+                                <div className="absolute top-0 left-12 w-12 h-12 bg-white rounded-full animate-pulse animation-delay-200"></div>
+                                <div className="absolute top-0 left-24 w-12 h-12 bg-white rounded-full animate-pulse animation-delay-400"></div>
                             </div>
-                        ))}
-                    </div>
-                )}
+                        </div>
+                    ) : selectedVideo ? (
+                        <VideoPlayer video={selectedVideo} />
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                            {videos.map((video) => (
+                                <div
+                                    key={video._id}
+                                    className="video-item cursor-pointer bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
+                                    onClick={() => handleVideoClick(video)}
+                                >
+                                    <img
+                                        src={video.thumbnail}
+                                        alt={video.title}
+                                        className="w-full h-40 object-cover"
+                                    />
+                                    <div className="p-2">
+                                        <h3 className="text-lg font-semibold truncate text-white">{video.title}</h3>
+                                        <p className="text-sm text-gray-300 truncate">Description: {video.description}</p>
+                                        <p className="text-sm text-blue-400 font-bold truncate">Views: {video.views}</p>
+                                        <p className="text-sm text-gray-400">
+                                            {new Date(video.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </>
     );
