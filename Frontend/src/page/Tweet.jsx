@@ -144,132 +144,142 @@ const TweetList = () => {
   return (
     <>
       <MainHeader />
-      <div className="bg-black p-6 mx-auto">
-        <h2 className="text-3xl font-bold text-white mb-6">Recent Tweets</h2>
-        <div className="flex justify-between mb-6">
-          <button
-            onClick={() => setIsCreating(true)}
-            className="bg-purple-600 font-semibold text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
-          >
-            Create Tweet
-          </button>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tweets.map((tweet) => (
-            <div
-              key={tweet._id}
-              className="bg-white border hover:bg-blue-200 border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg transition-shadow duration-200 ease-in-out"
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-6 mx-auto">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-white mb-8 text-center">
+            <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+              Recent Tweets
+            </span>
+          </h2>
+          
+          <div className="flex justify-between mb-8">
+            <button
+              onClick={() => setIsCreating(true)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 font-semibold text-white px-6 py-3 rounded-full shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
             >
-              <div className="flex items-center mb-4">
-                <div className="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-semibold">
-                  {tweet.user.username.charAt(0).toUpperCase()}
+              Create New Tweet
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {tweets.map((tweet) => (
+              <div
+                key={tweet._id}
+                className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
+                    {tweet.user.avatar}
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-white">
+                      {tweet.user.username}
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                      {new Date(tweet.createdAt).toLocaleString()}
+                    </p>
+                  </div>
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-700">
-                    {tweet.user.username}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {new Date(tweet.createdAt).toLocaleString()}
-                  </p>
+                
+                <p className="text-gray-200 leading-relaxed mb-4">{tweet.content}</p>
+                
+                {currentUser && tweet.user._id === currentUser._id && (
+                  <div className="mt-4 flex space-x-3">
+                    <button
+                      onClick={() => handleEditClick(tweet)}
+                      className="bg-yellow-500/80 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition-all duration-300"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteTweet(tweet._id)}
+                      className="bg-red-500/80 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-all duration-300"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+                
+                {currentUser && (
+                  <div className="mt-4 flex space-x-3">
+                    <button
+                      onClick={() => handleLikeDislike(tweet._id, 'like')}
+                      className={`bg-green-500/80 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition-all duration-300 ${likeStatus[tweet._id] === true ? 'ring-2 ring-green-500' : ''}`}
+                    >
+                      Like
+                    </button>
+                    <button
+                      onClick={() => handleLikeDislike(tweet._id, 'dislike')}
+                      className={`bg-red-500/80 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-all duration-300 ${likeStatus[tweet._id] === false ? 'ring-2 ring-red-500' : ''}`}
+                    >
+                      Dislike
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Create Tweet Modal */}
+          {isCreating && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="bg-gray-900 p-8 rounded-2xl shadow-2xl max-w-lg w-full border border-white/20">
+                <h2 className="text-2xl font-bold mb-6 text-white">Create Tweet</h2>
+                <textarea
+                  value={newTweet}
+                  onChange={(e) => setNewTweet(e.target.value)}
+                  className="w-full p-4 bg-gray-800 text-white border border-gray-700 rounded-xl mb-6 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  rows="4"
+                  placeholder="What's happening?"
+                />
+                <div className="flex justify-end space-x-4">
+                  <button
+                    onClick={() => setIsCreating(false)}
+                    className="bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-all duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateTweet}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
+                  >
+                    Post Tweet
+                  </button>
                 </div>
               </div>
-              <p className="text-gray-700 leading-relaxed">{tweet.content}</p>
-              {currentUser && tweet.user._id === currentUser._id && (
-                <div className="mt-4 flex space-x-2">
-                  <button
-                    onClick={() => handleEditClick(tweet)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition"
-                  >
-                    Edit Tweet
-                  </button>
-                  <button
-                    onClick={() => handleDeleteTweet(tweet._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
-                  >
-                    Delete Tweet
-                  </button>
-                </div>
-              )}
-              {/* Like/Dislike buttons */}
-              {currentUser && (
-                <div className="mt-4 flex space-x-2">
-                  <button
-                    onClick={() => handleLikeDislike(tweet._id, 'like')}
-                    className={`bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition ${likeStatus[tweet._id] === true ? 'opacity-50' : ''}`}
-                  >
-                    Like
-                  </button>
-                  <button
-                    onClick={() => handleLikeDislike(tweet._id, 'dislike')}
-                    className={`bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition ${likeStatus[tweet._id] === false ? 'opacity-50' : ''}`}
-                  >
-                    Dislike
-                  </button>
-                </div>
-              )}
             </div>
-          ))}
+          )}
+
+          {/* Update Tweet Modal - Similar styling as Create Modal */}
+          {isUpdating && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="bg-gray-900 p-8 rounded-2xl shadow-2xl max-w-lg w-full border border-white/20">
+                <h2 className="text-2xl font-bold mb-6 text-white">Update Tweet</h2>
+                <textarea
+                  value={updateTweet}
+                  onChange={(e) => setUpdateTweet(e.target.value)}
+                  className="w-full p-4 bg-gray-800 text-white border border-gray-700 rounded-xl mb-6 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  rows="4"
+                  placeholder="Update your tweet"
+                />
+                <div className="flex justify-end space-x-4">
+                  <button
+                    onClick={() => setIsUpdating(false)}
+                    className="bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-all duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleUpdateTweet}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
+                  >
+                    Update Tweet
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* Create Tweet Modal */}
-        {isCreating && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-              <h2 className="text-xl font-bold mb-4">Create Tweet</h2>
-              <textarea
-                value={newTweet}
-                onChange={(e) => setNewTweet(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-                rows="4"
-                placeholder="What's happening?"
-              />
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setIsCreating(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition mr-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleCreateTweet}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
-                >
-                  Post Tweet
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Update Tweet Modal */}
-        {isUpdating && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-              <h2 className="text-xl font-bold mb-4">Update Tweet</h2>
-              <textarea
-                value={updateTweet}
-                onChange={(e) => setUpdateTweet(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-                rows="4"
-                placeholder="Update your tweet"
-              />
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setIsUpdating(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 transition mr-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleUpdateTweet}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
-                >
-                  Update Tweet
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

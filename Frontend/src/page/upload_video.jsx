@@ -59,81 +59,129 @@ const VideoPostForm = () => {
   };
 
   return (
-
     <>
-    <MainHeader/>
-    <div className="flex flex-col border-2  border-slate-600 items-center p-8 bg-slate-900 min-h-screen">
-      <h1 className="text-2xl   text-orange-400 font-bold mb-4">Post a Video</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-3xl shadow-md w-full max-w-lg"
-      >
-        <div className="mb-4 ">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title:
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+      <MainHeader/>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500">
+              Upload Your Video
+            </h1>
+            <p className="mt-2 text-gray-400">Share your content with the world</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-200">
+                  Video Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                  className="mt-1 block w-full px-4 py-3 bg-white/5 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  placeholder="Enter your video title"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-200">
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                  rows="4"
+                  className="mt-1 block w-full px-4 py-3 bg-white/5 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  placeholder="Describe your video content"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="video" className="block text-sm font-medium text-gray-200">
+                    Video File
+                  </label>
+                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-orange-500 transition-colors">
+                    <div className="space-y-1 text-center">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <div className="flex text-sm text-gray-400">
+                        <input
+                          type="file"
+                          id="video"
+                          name="video"
+                          accept="video/*"
+                          onChange={handleFileChange}
+                          required
+                          className="sr-only"
+                        />
+                        <label htmlFor="video" className="relative cursor-pointer rounded-md font-medium text-orange-500 hover:text-orange-400">
+                          <span>Upload a video</span>
+                        </label>
+                      </div>
+                      <p className="text-xs text-gray-400">MP4, MOV up to 100MB</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-200">
+                    Thumbnail
+                  </label>
+                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-orange-500 transition-colors">
+                    <div className="space-y-1 text-center">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <div className="flex text-sm text-gray-400">
+                        <input
+                          type="file"
+                          id="thumbnail"
+                          name="thumbnail"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          required
+                          className="sr-only"
+                        />
+                        <label htmlFor="thumbnail" className="relative cursor-pointer rounded-md font-medium text-orange-500 hover:text-orange-400">
+                          <span>Upload a thumbnail</span>
+                        </label>
+                      </div>
+                      <p className="text-xs text-gray-400">PNG, JPG up to 10MB</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <ReactLoading type="bars" color="#fff" height={24} width={24} />
+                ) : (
+                  'Upload Video'
+                )}
+              </button>
+            </div>
+          </form>
+
+          {responseMessage && (
+            <div className="mt-4 p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+              <p className="text-center text-green-400 font-medium">{responseMessage}</p>
+            </div>
+          )}
         </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            Description:
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="video" className="block text-sm font-medium text-gray-700">
-            Video File:
-          </label>
-          <input
-            type="file"
-            id="video"
-            name="video"
-            accept="video/*"
-            onChange={handleFileChange}
-            required
-            className="mt-1 block w-full text-sm text-gray-500 file:border file:border-gray-300 file:py-2 file:px-4 file:rounded-md file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
-            />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="thumbnail" className="block text-sm font-medium text-gray-700">
-            Thumbnail File:
-          </label>
-          <input
-            type="file"
-            id="thumbnail"
-            name="thumbnail"
-            accept="image/*"
-            onChange={handleFileChange}
-            required
-            className="mt-1 block w-full text-sm text-gray-500 file:border file:border-gray-300 file:py-2 file:px-4 file:rounded-md file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
-            />
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          {loading ? <ReactLoading type='bars' color="#fff" /> : 'Post Video'}
-        </button>
-      </form>
-      {responseMessage && (
-          <p className="mt-4 text-lg font-semibold text-green-600">{responseMessage}</p>
-        )}
-    </div>
-        </>
+      </div>
+    </>
   );
 };
 

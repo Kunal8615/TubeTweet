@@ -126,6 +126,7 @@ const getAllTweets = asynchandler(async (req, res) => {
           content: 1,
           createdAt: 1,
           'user.username': 1,
+          'user.avatar' : 1
         },
       },
     ]);
