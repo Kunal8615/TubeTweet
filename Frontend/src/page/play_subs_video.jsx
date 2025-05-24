@@ -141,10 +141,10 @@ const VideoPlayer = ({ video }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex relative">
+      <div className="flex flex-col lg:flex-row relative">
         {/* Left Side - Video and Info */}
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
+        <div className="flex-1 p-3 sm:p-6 w-full max-w-full">
+          <div className="max-w-4xl mx-auto w-full">
             {/* Video Player */}
             <div className="bg-gray-800 rounded-xl shadow-2xl overflow-hidden mb-6 border border-gray-700">
               <div className="aspect-video">
@@ -164,7 +164,7 @@ const VideoPlayer = ({ video }) => {
             <div className="bg-gray-800 rounded-xl shadow-2xl p-6 mb-6 border border-gray-700">
               <h1 className="text-2xl font-bold text-white mb-4">{video.title}</h1>
               
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-4">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
@@ -179,10 +179,10 @@ const VideoPlayer = ({ video }) => {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-col xs:flex-row gap-3 w-full sm:w-auto">
                   <button
                     onClick={handleSubscribeToggle}
-                    className={`px-6 py-2 rounded-full font-semibold transition-all ${
+                    className={`w-full sm:w-auto px-6 py-2 rounded-full font-semibold transition-all ${
                       isSubscribed 
                         ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
                         : 'bg-red-600 text-white hover:bg-red-700'
@@ -192,13 +192,13 @@ const VideoPlayer = ({ video }) => {
                   </button>
                   <button
                     onClick={handleLikeToggle}
-                    className={`px-6 py-2 rounded-full font-semibold transition-all ${
+                    className={`w-full sm:w-auto px-6 py-2 rounded-full font-semibold transition-all ${
                       isLiked 
                         ? 'bg-blue-600 text-white hover:bg-blue-700' 
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                     }`}
                   >
-                    <span className="flex items-center">
+                    <span className="flex items-center justify-center">
                       <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                       </svg>
@@ -214,15 +214,20 @@ const VideoPlayer = ({ video }) => {
             </div>
 
             {/* Comments Section */}
-            <div className="bg-gray-800 rounded-xl shadow-2xl p-6 border border-gray-700">
-              <CommentsList videoId={video} />
+            <div className="bg-gray-800 rounded-xl shadow-2xl p-2 sm:p-4 md:p-6 border border-gray-700 mt-4 sm:mt-0">
+              <h2 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
+                Comments
+              </h2>
+              <div className="max-h-[300px] sm:max-h-[400px] overflow-y-auto">
+                <CommentsList videoId={video} />
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Sidebar - Playlists */}
-        <div className="w-80 bg-gray-800 shadow-2xl p-6 border-l border-gray-700">
-          <div className="sticky top-6">
+        <div className="w-full lg:w-80 bg-gray-800 shadow-2xl p-4 sm:p-6 border-t lg:border-t-0 lg:border-l border-gray-700 mt-4 lg:mt-0">
+          <div className="sticky top-6 lg:static">
             <h3 className="text-xl font-bold text-white mb-4">Add to Playlist</h3>
             
             {playlist.length > 0 ? (
