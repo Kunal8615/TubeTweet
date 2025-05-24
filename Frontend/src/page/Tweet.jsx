@@ -168,9 +168,16 @@ const TweetList = () => {
                 className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="flex items-center mb-4">
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
-                    {tweet.user.avatar}
-                  </div>
+                
+<div className="w-12 h-12 rounded-full overflow-hidden border-2 border-purple-500 flex items-center justify-center bg-white">
+  <img
+    src={tweet.user.avatar}
+    alt={tweet.user.username}
+    className="w-full h-full object-cover"
+    onError={(e) => { e.target.onerror = null; e.target.src = '/default-avatar.png'; }}
+  />
+</div>
+
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-white">
                       {tweet.user.username}
